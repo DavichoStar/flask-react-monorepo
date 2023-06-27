@@ -200,6 +200,7 @@ const Products: React.FC = () => {
     form.setValue("price", data.price);
     form.setValue("stock", data.stock);
     form.setValue("category", data.category);
+    form.setValue("image", data.image);
 
     setOpenModal(true);
   };
