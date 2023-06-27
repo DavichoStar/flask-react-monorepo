@@ -1,0 +1,19 @@
+{
+  "name": "flask-react-monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "concurrently \"pnpm run client\" \"pnpm run server\"",
+    "client": "cd client && pnpm dev",
+    "server": "FLASK_APP=server flask run -p 7000"
+  },
+  "author": {
+    "name": "DavichoStar",
+    "email": "davichostar@protonmail.com"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
