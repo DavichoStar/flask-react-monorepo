@@ -4,5 +4,10 @@ setup(
     name="server",
     packages=["server"],
     include_package_data=True,
-    install_requires=["flask", "flask_cors", "flask_pymongo", "flask_jwt_extended"],
+    install_requires=[
+        "flask",
+        "flask_cors",
+        "flask_pymongo",
+        "flask_jwt_extended",
+    ],
 )

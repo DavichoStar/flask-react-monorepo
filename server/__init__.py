@@ -6,8 +6,10 @@ from flask_jwt_extended import (
     create_access_token,
     get_jwt_identity,
 )
-import flask_cors as C
+from flask_cors import CORS
 import datetime
+
+# import pytz
 
 app = Flask(__name__)
 
@@ -19,9 +21,11 @@ mongo = PM.PyMongo(app)  # Instancia de PyMongo
 dbProd = mongo.db.products  # Instancia de la base de datos de productos
 dbUser = mongo.db.users  # Instancia de la base de datos de usuarios
 # Cors
-C.CORS(app)  # Instancia de CORS
+CORS(app)
 # JWT
 jwt = JWTManager(app)
+# Zona horaria de la Ciudad de México
+# timezone = pytz.timezone("America/Mexico_City")
 
 
 @app.route("/")
@@ -44,8 +48,25 @@ def login():
     if user["password"] != password:
         return jsonify({"message": "Invalid credentials"}), 401
 
-    access_token = create_access_token(identity=str(PM.ObjectId(user["_id"])))
-    return jsonify(access_token=access_token), 200
+    access_token = create_access_token(
+        identity=str(PM.ObjectId(user["_id"]))
+    )  # Expira en 30 minutos
+    # Obtener la hora actual en la zona horaria de la Ciudad de México
+    current_time = datetime.datetime.now()  # .now(timezone)
+    expiration_time = current_time + datetime.timedelta(minutes=30)
+    expiration_time_str = expiration_time.strftime("%Y-%m-%d %H:%M:%S %Z%z")
+
+    return (
+        jsonify(
+            access_token=access_token,
+            expires_in=expiration_time_str,
+            user={
+                "id": str(PM.ObjectId(user["_id"])),
+                "username": user["username"],
+            },
+        ),
+        200,
+    )
 
 
 # Listar todos los productos
